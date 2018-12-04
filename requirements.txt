@@ -1,2 +1,1 @@
 tensor2tensor==1.11.0
-tensorflow==1.12.0
