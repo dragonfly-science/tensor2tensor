@@ -1,7 +1,7 @@
 DOCKER_REGISTRY := 121565642659.dkr.ecr.us-east-1.amazonaws.com/waha-tuhi
 IMAGE_NAME := tensor2tensor-$(COMPUTE)
 IMAGE := $(DOCKER_REGISTRY)/$(IMAGE_NAME)
-RUN ?= docker run $(DOCKER_ARGS) --rm -v --runtime $(RUNTIME) $$(pwd):/work -w /work -u $(UID):$(GID) $(IMAGE)
+RUN ?= docker run --runtime $(RUNTIME) $(DOCKER_ARGS) --rm -v $$(pwd):/work -w /work -u $(UID):$(GID) $(IMAGE):latest
 UID ?= $(shell id -u)
 GID ?= $(shell id -g)
 DOCKER_ARGS ?= 
@@ -22,6 +22,7 @@ train:
 
 .PHONY: docker
 docker:
+	eval $$(aws ecr get-login --no-include-email --region us-east-1 | sed 's|https://||')
 	docker build --tag $(IMAGE):$(GIT_TAG) -f Dockerfile.$(COMPUTE) .
 	docker tag $(IMAGE):$(GIT_TAG) $(IMAGE):latest
 
