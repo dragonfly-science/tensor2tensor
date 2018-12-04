@@ -2,3 +2,5 @@ FROM tensorflow/tensorflow:1.12.0-gpu
 
 COPY requirements.txt /root/requirements.txt
 RUN pip install -r /root/requirements.txt
+RUN apt-get install zip
+
