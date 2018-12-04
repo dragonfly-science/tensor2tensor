@@ -20,6 +20,9 @@ train:
 		--train_steps=1000 \
 		--eval_steps=100
 
+tensorboard:
+	$(RUN) tensorboard --logdir=t2t_data/languagemodel_ptb10k --port 6006
+
 .PHONY: docker
 docker:
 	eval $$(aws ecr get-login --no-include-email --region us-east-1 | sed 's|https://||')
