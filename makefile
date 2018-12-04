@@ -1,5 +1,5 @@
-DOCKER_REGISTRY := docker.dragonfly.co.nz
-IMAGE_NAME := tensor2tensor
+DOCKER_REGISTRY := 121565642659.dkr.ecr.us-east-1.amazonaws.com/waha-tuhi
+IMAGE_NAME := tensor2tensor-$(COMPUTE)
 IMAGE := $(DOCKER_REGISTRY)/$(IMAGE_NAME)
 RUN ?= docker run $(DOCKER_ARGS) --rm -v --runtime $(RUNTIME) $$(pwd):/work -w /work -u $(UID):$(GID) $(IMAGE)
 UID ?= $(shell id -u)
