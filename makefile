@@ -10,11 +10,11 @@ GIT_TAG ?= $(shell git log --oneline | head -n1 | awk '{print $$1}')
 train:
 	$(RUN) t2t-trainer \
 		--generate_data \
-		--data_dir=t2t_data \
-		--output_dir=t2t_train/translate_ende \
-		--problem=translate_ende_wmt32k_rev \
+		--data_dir=t2t_data/languagemodel_ptb10k \
+		--output_dir=t2t_train/languagemodel_ptb10k \
+		--problem=languagemodel_ptb10k \
 		--model=transformer \
-		--hparams_set=transformer_base_single_gpu \
+		--hparams_set=transformer_small \
 		--train_steps=1000 \
 		--eval_steps=100
 
