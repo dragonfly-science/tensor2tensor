@@ -1,20 +1,20 @@
 DOCKER_REGISTRY := docker.dragonfly.co.nz
 IMAGE_NAME := tensor2tensor
 IMAGE := $(DOCKER_REGISTRY)/$(IMAGE_NAME)
-RUN ?= docker run $(INTERACT) --rm -v $$(pwd):/work -w /work -u $(UID):$(GID) $(IMAGE)
+RUN ?= docker run $(DOCKER_ARGS) --rm -v $$(pwd):/work -w /work -u $(UID):$(GID) $(IMAGE)
 UID ?= $(shell id -u)
 GID ?= $(shell id -g)
-INTERACT ?= 
+DOCKER_ARGS ?= 
 GIT_TAG ?= $(shell git log --oneline | head -n1 | awk '{print $$1}')
 
 train:
 	$(RUN) t2t-trainer \
 		--generate_data \
 		--data_dir=t2t_data \
-		--output_dir=t2t_train/mnist \
-		--problem=image_mnist \
-		--model=shake_shake \
-		--hparams_set=shake_shake_quick \
+		--output_dir=t2t_train/translate_ende \
+		--problem=translate_ende_wmt32k_rev \
+		--model=transformer \
+		--hparams_set=transformer_base_single_gpu \
 		--train_steps=1000 \
 		--eval_steps=100
 
@@ -34,16 +34,19 @@ docker-pull:
 	docker tag $(IMAGE):$(GIT_TAG) $(IMAGE):latest
 
 .PHONY: enter
-enter: INTERACT=-it
+enter: DOCKER_ARGS=-it
 enter:
 	$(RUN) bash
 
 .PHONY: enter-root
-enter-root: INTERACT=-it
+enter-root: DOCKER_ARGS=-it
 enter-root: UID=root
 enter-root: GID=root
 enter-root:
 	$(RUN) bash
+
+clean:
+	rm -rf t2t_train/* t2t_data/*
 
 .PHONY: inspect-variables
 inspect-variables:
@@ -53,5 +56,5 @@ inspect-variables:
 	@echo RUN:             $(RUN)
 	@echo UID:             $(UID)
 	@echo GID:             $(GID)
-	@echo INTERACT:        $(INTERACT)
+	@echo DOCKER_ARGS:     $(DOCKER_ARGS)
 	@echo GIT_TAG:         $(GIT_TAG)
