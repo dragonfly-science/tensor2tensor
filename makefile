@@ -21,7 +21,7 @@ train:
 		--eval_steps=100
 
 tensorboard:
-	$(RUN) tensorboard --logdir=t2t_data/languagemodel_ptb10k --port 6006
+	$(RUN) tensorboard --logdir=t2t_train/languagemodel_ptb10k --port 6006
 
 .PHONY: docker
 docker:
