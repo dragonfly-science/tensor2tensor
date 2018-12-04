@@ -4,7 +4,7 @@ set -ex
 
 export RUN=
 
-make train
+make tensorboard & make train
 
-zip t2t_data.zip /output/t2t_data
-zip t2t_train.zip /output/t2t_train
+zip /output/t2t_data.zip t2t_data/languagemodel_ptb10k/*
+zip /output/t2t_train.zip t2t_train/languagemodel_ptb10k/*
