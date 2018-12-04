@@ -1,12 +1,12 @@
+COMPUTE ?= cpu
+RUNTIME ?= runc
 DOCKER_REGISTRY := docker.dragonfly.co.nz
-IMAGE_NAME := tensor2tensor
+IMAGE_NAME := tensor2tensor-$(COMPUTE)
 IMAGE := $(DOCKER_REGISTRY)/$(IMAGE_NAME)
 RUN ?= docker run $(DOCKER_ARGS) --rm -v --runtime $(RUNTIME) $$(pwd):/work -w /work -u $(UID):$(GID) $(IMAGE)
 UID ?= $(shell id -u)
 GID ?= $(shell id -g)
 DOCKER_ARGS ?= 
-COMPUTE ?= cpu
-RUNTIME ?= runc
 GIT_TAG ?= $(shell git log --oneline | head -n1 | awk '{print $$1}')
 
 train:
