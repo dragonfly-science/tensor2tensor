@@ -6,5 +6,5 @@ export RUN=
 
 make train
 
-zip t2t_data.zip /output/t2t_data
-zip t2t_train.zip /output/t2t_train
+zip /output/t2t_data.zip t2t_data/*
+zip /output/t2t_train.zip t2t_train/*
