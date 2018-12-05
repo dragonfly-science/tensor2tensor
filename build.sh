@@ -21,10 +21,10 @@ make data
 make tensorboard & make train
 
 # See the decoder output
-make decode_output.txt
-cat decode_output.txt
+# make decode_output.txt
+# cat decode_output.txt
 
-make score
+# make score
 
 zip -r /output/t2t_datagen.zip TMP_DIR/*
 zip -r /output/t2t_data.zip DATA_DIR/*
