@@ -9,16 +9,50 @@ GID ?= $(shell id -g)
 DOCKER_ARGS ?= 
 GIT_TAG ?= $(shell git log --oneline | head -n1 | awk '{print $$1}')
 
+DATA_DIR ?= t2t_data/languagemodel_ptb10k
+TRAIN_DIR ?= t2t_train/languagemodel_ptb10k
+PROBLEM ?= languagemodel_ptb10k
+MODEL ?= transformer
+HPARAMS ?= transformer_small
+TRAIN_STEPS ?= 1000
+EVAL_STEPS ?= 100
+
+BEAM_SIZE=4
+ALPHA=0.6
+
+# Generate data
+data:
+	$(RUN) t2t-datagen \
+		--data_dir=$(DATA_DIR) \
+		--tmp_dir=$(TMP_DIR) \
+		--problem=$(PROBLEM)
+
 train:
 	$(RUN) t2t-trainer \
 		--generate_data \
-		--data_dir=t2t_data/languagemodel_ptb10k \
-		--output_dir=t2t_train/languagemodel_ptb10k \
-		--problem=languagemodel_ptb10k \
-		--model=transformer \
-		--hparams_set=transformer_small \
-		--train_steps=1000 \
-		--eval_steps=100
+		--data_dir=$(DATA_DIR) \
+		--output_dir=$(TRAIN_DIR) \
+		--problem=$(PROBLEM) \
+		--model=$(MODEL) \
+		--hparams_set=$(HPARAMS) \
+		--train_steps=$(TRAIN_STEPS) \
+		--eval_steps=$(EVAL_STEPS) \
+
+decode: decode_output.txt
+
+decode_output.txt:
+	$(RUN) t2t-decoder \
+		--data_dir=$(DATA_DIR) \
+		--problem=$(PROBLEM) \
+		--model=$(MODEL) \
+		--hparams_set=$(HPARAMS) \
+		--output_dir=$(TRAIN_DIR) \
+		--decode_hparams="beam_size=$(BEAM_SIZE),alpha=$(ALPHA)"
+
+# Evaluate the BLEU score
+# Note: Report this BLEU score in papers, not the internal approx_bleu metric.
+score: decode_output.txt
+	t2t-bleu --translation=decode_output.txt --reference=ref-translation.de
 
 tensorboard:
 	$(RUN) tensorboard --logdir=t2t_train/languagemodel_ptb10k --port 6006
