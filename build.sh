@@ -26,6 +26,6 @@ make tensorboard & make train
 
 # make score
 
-zip -r /output/t2t_datagen.zip TMP_DIR/*
-zip -r /output/t2t_data.zip DATA_DIR/*
-zip -r /output/t2t_train.zip TRAIN_DIR/*
+zip -r /output/t2t_datagen.zip $TMP_DIR/*
+zip -r /output/t2t_data.zip $DATA_DIR/*
+zip -r /output/t2t_train.zip $TRAIN_DIR/*
