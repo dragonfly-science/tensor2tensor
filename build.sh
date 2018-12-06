@@ -10,7 +10,6 @@ export HPARAMS=transformer_small
 export TRAIN_STEPS=1000
 export EVAL_STEPS=100
 
-
 export DATA_DIR=$HOME/t2t_data/$PROBLEM
 export TMP_DIR=$HOME/t2t_datagen/$PROBLEM
 export TRAIN_DIR=$HOME/t2t_train/$PROBLEM/$MODEL-$HPARAMS
